@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ateliê da Eliz | Tapetes de Crochê Artesanais</title>
+    <!-- Fontes elegantes do Google -->
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Link para o arquivo CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- Cabeçalho -->
+    <header class="header">
+        <div class="container header-content">
+            <div class="logo">
+                <span class="logo-icon">🧶</span>
+                <div>
+                    <h1>Ateliê da Eliz</h1>
+                    <p>Crochê Artesanal feito com Amor</p>
+                </div>
+            </div>
+            <div class="header-actions">
+                <button class="btn-outline" onclick="abrirModalWhatsApp()">📱 Configurar WhatsApp</button>
+                <button class="btn-primary" onclick="abrirModalCadastro()">+ Cadastrar Tapete / Fotos</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Destaque Principal (Tapete de 2m por R$ 400) -->
+    <section class="hero">
+        <div class="container hero-grid">
+            <div class="hero-text">
+                <span class="badge">✨ Destaque da Coleção da Eliz</span>
+                <h2>Tapete Redondo Imperial em Crochê</h2>
+                <p>Peça exclusiva feita à mão com barbante premium de alta maciez e durabilidade. Transforme sua sala ou quarto com o aconchego do verdadeiro artesanato.</p>
+                
+                <div class="highlight-specs">
+                    <div class="spec-box">
+                        <span class="spec-label">Medida em Destaque</span>
+                        <strong class="spec-value">2,00m de Circunferência</strong>
+                    </div>
+                    <div class="spec-box">
+                        <span class="spec-label">Valor Especial</span>
+                        <strong class="spec-value price">R$ 400,00</strong>
+                    </div>
+                </div>
+
+                <div class="hero-buttons">
+                    <button class="btn-whatsapp" onclick="abrirDetalhes(1)">
+                        Ver Tamanhos e Encomendar
+                    </button>
+                    <label class="btn-upload-hero">
+                        📷 Anexar Foto Real deste Tapete
+                        <input type="file" accept="image/*" multiple hidden onchange="adicionarFotoRapida(event, 1)">
+                    </label>
+                </div>
+            </div>
+
+            <div class="hero-image-card" id="hero-card">
+                <img id="hero-img" src="https://images.unsplash.com/photo-1584100936595-c0654b55a2e2?auto=format&fit=crop&w=900&q=80" alt="Tapete de Crochê 2m">
+                <div class="hero-floating-tag">2m • R$ 400,00</div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Catálogo de Tapetes -->
+    <main class="container catalog-section">
+        <div class="section-header">
+            <div>
+                <h2>Catálogo de Tapetes</h2>
+                <p>Clique em qualquer tapete para ver todas as fotos, escolher o tamanho ideal ou anexar novas imagens.</p>
+            </div>
+            <div class="filter-bar">
+                <button class="filter-btn active" onclick="filtrarTapetes('todos', this)">Todos</button>
+                <button class="filter-btn" onclick="filtrarTapetes('Redondo', this)">Redondos</button>
+                <button class="filter-btn" onclick="filtrarTapetes('Oval', this)">Ovais / Passadeiras</button>
+                <button class="filter-btn" onclick="filtrarTapetes('Kit', this)">Jogos & Kits</button>
+            </div>
+        </div>
+
+        <!-- Lista de Produtos gerada pelo JavaScript -->
+        <div id="produtos-grid" class="produtos-grid"></div>
+    </main>
+
+    <!-- Modal de Detalhes do Tapete (Várias Fotos + Tamanhos) -->
+    <div id="modal-detalhes" class="modal-overlay">
+        <div class="modal-box modal-large">
+            <button class="modal-close" onclick="fecharModal('modal-detalhes')">&times;</button>
+            <div class="detalhes-grid">
+                <!-- Galeria de Fotos -->
+                <div class="galeria-container">
+                    <div class="foto-principal-wrap">
+                        <img id="detalhe-foto-principal" src="" alt="Foto do Tapete">
+                    </div>
+                    <div id="detalhe-miniaturas" class="miniaturas-grid"></div>
+                    
+                    <label class="btn-add-more-photos">
+                        + Anexar mais fotos neste tapete
+                        <input type="file" accept="image/*" multiple hidden id="input-mais-fotos">
+                    </label>
+                </div>
+
+                <!-- Informações e Escolha de Tamanho -->
+                <div class="detalhes-info">
+                    <span id="detalhe-categoria" class="badge">Categoria</span>
+                    <h2 id="detalhe-nome">Nome do Tapete</h2>
+                    <p id="detalhe-descricao" class="detalhe-desc"></p>
+
+                    <div class="preco-display">
+                        <span>Valor do tamanho selecionado:</span>
+                        <strong id="detalhe-preco">R$ 400,00</strong>
+                    </div>
+
+                    <div class="tamanhos-section">
+                        <label>Escolha o Tamanho / Circunferência:</label>
+                        <div id="detalhe-tamanhos" class="tamanhos-opcoes"></div>
+                    </div>
+
+                    <div class="personalizar-cor">
+                        <label for="cor-escolhida">Cor desejada (opcional):</label>
+                        <input type="text" id="cor-escolhida" placeholder="Ex: Cru com Caramelo, Verde Musgo, Rosa Bebê...">
+                    </div>
+
+                    <button id="btn-comprar-zap" class="btn-whatsapp full-width">
+                        💬 Pedir este Tapete no WhatsApp da Eliz
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal para Cadastrar Novo Tapete com Várias Fotos e Tamanhos -->
+    <div id="modal-cadastro" class="modal-overlay">
+        <div class="modal-box">
+            <button class="modal-close" onclick="fecharModal('modal-cadastro')">&times;</button>
+            <h2>Cadastrar Novo Tapete</h2>
+            <p class="modal-sub">Adicione fotos dos seus trabalhos, tamanhos disponíveis e valores.</p>
+
+            <form id="form-novo-tapete" onsubmit="salvarNovoTapete(event)">
+                <div class="form-group">
+                    <label>Nome do Tapete *</label>
+                    <input type="text" id="novo-nome" required placeholder="Ex: Tapete Redondo Russo 2m">
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Formato / Categoria</label>
+                        <select id="novo-categoria">
+                            <option value="Redondo">Redondo</option>
+                            <option value="Oval">Oval / Passadeira</option>
+                            <option value="Kit">Jogo de Cozinha / Banheiro</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label>Descrição (Barbante, pontos, detalhes)</label>
+                    <textarea id="novo-desc" rows="2" placeholder="Ex: Feito em barbante fio 8, super encorpado, fácil de lavar..."></textarea>
+                </div>
+
+                <!-- Tamanhos e Preços Dinâmicos -->
+                <div class="form-group">
+                    <label>Tamanhos e Valores *</label>
+                    <div id="lista-tamanhos-form">
+                        <div class="tamanho-row">
+                            <input type="text" class="input-medida" placeholder="Ex: 2m de circunferência" value="2m de circunferência" required>
+                            <input type="number" class="input-preco" placeholder="Preço (R$)" value="400" step="0.01" required>
+                        </div>
+                    </div>
+                    <button type="button" class="btn-small" onclick="adicionarCampoTamanho()">+ Adicionar outro tamanho</button>
+                </div>
+
+                <!-- Anexar Diversas Fotos -->
+                <div class="form-group">
+                    <label>Anexar Fotos do Tapete (Pode selecionar várias de uma vez) *</label>
+                    <label class="dropzone">
+                        <span>📸 Clique aqui para escolher as fotos do celular ou PC</span>
+                        <input type="file" id="novo-fotos" accept="image/*" multiple hidden onchange="previsualizarFotosCadastro(event)">
+                    </label>
+                    <div id="preview-cadastro" class="miniaturas-grid"></div>
+                </div>
+
+                <button type="submit" class="btn-primary full-width">Salvar Tapete no Catálogo</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal Configurar WhatsApp -->
+    <div id="modal-whatsapp" class="modal-overlay">
+        <div class="modal-box modal-small">
+            <button class="modal-close" onclick="fecharModal('modal-whatsapp')">&times;</button>
+            <h2>Seu WhatsApp de Vendas</h2>
+            <p class="modal-sub">Digite seu número com DDD para receber as encomendas dos clientes direto no seu celular.</p>
+            <div class="form-group">
+                <label>WhatsApp com DDD (apenas números)</label>
+                <input type="text" id="input-zap-eliz" placeholder="Ex: 11999999999">
+            </div>
+            <button class="btn-primary full-width" onclick="salvarWhatsApp()">Salvar Número</button>
+        </div>
+    </div>
+
+    <!-- Rodapé -->
+    <footer class="footer">
+        <div class="container">
+            <p>🧶 <strong>Ateliê da Eliz</strong> — Tapetes de Crochê sob medida e pronta entrega.</p>
+            <small>Todas as fotos e tapetes cadastrados ficam salvos automaticamente no seu navegador.</small>
+        </div>
+    </footer>
+
+    <!-- Link para o arquivo JavaScript -->
+    <script src="script.js"></script>
+</body>
+</html>
